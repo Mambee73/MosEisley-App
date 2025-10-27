@@ -12,16 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.mambee73.merc_moseisleyapp.ui.theme.MercMosEisleyAppTheme
-import com.mambee73.merc_moseisleyapp.ui.screens.*
 import com.mambee73.merc_moseisleyapp.ui.navigation.AppNavigation
-
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
-
-
-
-
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,27 +25,15 @@ class MainActivity : ComponentActivity() {
             MercMosEisleyAppTheme {
                 val navController = rememberNavController()
                 val usuarioViewModel = viewModel<UsuarioViewModel>()
-                AppNavigation(navController, usuarioViewModel)
+                val productoViewModel = viewModel<ProductoViewModel>()
+
+                AppNavigation(
+                    navController = navController,
+                    usuarioViewModel = usuarioViewModel,
+                    productoViewModel = productoViewModel
+                )
             }
         }
-    }
-}
-
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MercMosEisleyAppTheme {
-        Greeting("Android")
     }
 }
 

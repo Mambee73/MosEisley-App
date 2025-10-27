@@ -7,6 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
+import com.mambee73.merc_moseisleyapp.ui.screens.SubirProductoScreen
+
 
 @Composable
 fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {
@@ -24,10 +27,19 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
         Text("Carga declarada: ${usuarioViewModel.carga.value}")
 
         Button(
-            onClick = { navController.navigate("home") },
+            onClick = { navController.navigate(Screen.Catalogo.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Volver al inicio")
+            Text("Entrar a la Cantina")
         }
+
+        Button(
+            onClick = { navController.navigate(Screen.SubirProducto.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Publicar producto en la Cantina")
+        }
+
+
     }
 }
