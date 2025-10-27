@@ -40,6 +40,14 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
             Text("Publicar producto en la Cantina")
         }
 
+        Button(
+            onClick = { navController.navigate(Screen.Home.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Salir al inicio")
+        }
+
+
 
     }
 }

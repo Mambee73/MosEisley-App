@@ -15,7 +15,12 @@ fun AppNavigation(
     usuarioViewModel: UsuarioViewModel,
     productoViewModel: ProductoViewModel
 ) {
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    NavHost(navController = navController, startDestination = Screen.Home.route) {
+
+        composable(Screen.Home.route) {
+            HomeScreen(navController)
+        }
+
 
         composable(Screen.Login.route) {
             LoginScreen(navController, usuarioViewModel)
