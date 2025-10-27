@@ -3,37 +3,39 @@ package com.mambee73.merc_moseisleyapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.mambee73.merc_moseisleyapp.ui.theme.MercMosEisleyAppTheme
-import com.mambee73.merc_moseisleyapp.ui.navigation.AppNavigation
+import androidx.activity.viewModels
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.navigation.AppNavigation
+import com.mambee73.merc_moseisleyapp.ui.theme.*
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ✅ Crear los ViewModels aquí para que se mantengan vivos
+        val productoViewModel: ProductoViewModel by viewModels()
+        val carritoViewModel: CarritoViewModel by viewModels()
+
         setContent {
             MercMosEisleyAppTheme {
-                val navController = rememberNavController()
-                val usuarioViewModel = viewModel<UsuarioViewModel>()
-                val productoViewModel = viewModel<ProductoViewModel>()
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    val navController = rememberNavController()
 
-                AppNavigation(
-                    navController = navController,
-                    usuarioViewModel = usuarioViewModel,
-                    productoViewModel = productoViewModel
-                )
+                    // ✅ Pasarlos a AppNavigation
+                    AppNavigation(
+                        navController = navController,
+                        productoViewModel = productoViewModel,
+                        carritoViewModel = carritoViewModel
+                    )
+                }
             }
         }
     }
 }
+
+
 

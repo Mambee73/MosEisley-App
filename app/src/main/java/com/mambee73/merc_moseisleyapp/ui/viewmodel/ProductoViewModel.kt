@@ -14,7 +14,6 @@ class ProductoViewModel : ViewModel() {
     private fun cargarProductosIniciales() {
         productos.addAll(
             listOf(
-                // Aquí pegas los productos por categoría que te mostré antes
                 Producto(
                     nombre = "Poncho estilo Tatooine",
                     descripcion = "Tela rústica con protección solar, usado por comerciantes del Borde Exterior.",
@@ -59,5 +58,6 @@ class ProductoViewModel : ViewModel() {
         productos.add(producto)
     }
 }
+
 
 

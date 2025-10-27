@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-// Paleta inspirada en Mos Eisley
+
 val TatooineSand = Color(0xFFD2B48C)
 val RustMetal = Color(0xFF8B5E3C)
 val CantinaGlow = Color(0xFFFFD700)

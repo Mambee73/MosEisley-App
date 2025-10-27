@@ -11,36 +11,60 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.model.Producto
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
 
 @Composable
-fun CatalogoScreen(navController: NavHostController, productoViewModel: ProductoViewModel) {
-    val categoriasDisponibles = listOf(
-        "Ropa",
-        "Libros/Cómics/Revistas",
-        "Artículos Tecnológicos",
-        "Cosas Nuevas/Cerradas",
-        "Artículos de Segunda Mano/Curiosos",
-        "Videojuegos/Holo-Juegos"
-    )
-
+fun CatalogoScreen(
+    navController: NavHostController,
+    productoViewModel: ProductoViewModel,
+    carritoViewModel: CarritoViewModel
+) {
     var categoriaSeleccionada by remember { mutableStateOf("") }
+    var textoBusqueda by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    val productosFiltrados = productoViewModel.productos.filter { producto ->
+        val coincideCategoria = categoriaSeleccionada.isEmpty() ||
+                producto.categoria.startsWith(categoriaSeleccionada, ignoreCase = true)
 
-        Text("Catálogo de la Cantina", style = MaterialTheme.typography.headlineMedium)
+        val coincideBusqueda = textoBusqueda.isEmpty() ||
+                producto.nombre.contains(textoBusqueda, ignoreCase = true)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        coincideCategoria && coincideBusqueda
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Catálogo Mos Eisley", style = MaterialTheme.typography.headlineMedium)
+        Text("Productos cargados: ${productoViewModel.productos.size}")
+
+        OutlinedTextField(
+            value = textoBusqueda,
+            onValueChange = { textoBusqueda = it },
+            label = { Text("Buscar producto") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        val categorias = listOf(
+            "Ropa",
+            "Libros/Cómics/Revistas",
+            "Artículos Tecnológicos",
+            "Cosas Nuevas/Cerradas",
+            "Artículos de Segunda Mano/Curiosos",
+            "Videojuegos/Holo-Juegos"
+        )
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(categoriasDisponibles) { categoria ->
+            items(categorias) { categoria ->
                 FilterChip(
-                    selected = categoria == categoriaSeleccionada,
+                    selected = categoriaSeleccionada == categoria,
                     onClick = {
                         categoriaSeleccionada = if (categoriaSeleccionada == categoria) "" else categoria
                     },
@@ -49,26 +73,31 @@ fun CatalogoScreen(navController: NavHostController, productoViewModel: Producto
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            categoriaSeleccionada = ""
+            textoBusqueda = ""
+        }) {
+            Text("Mostrar todos los productos")
+        }
 
-
-        val productosFiltrados = if (categoriaSeleccionada.isNotEmpty()) {
-            productoViewModel.productos.filter { it.categoria == categoriaSeleccionada }
-        } else {
-            productoViewModel.productos
+        if (productosFiltrados.isEmpty()) {
+            Text("No se encontraron productos en esta categoría o búsqueda.")
         }
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(productosFiltrados) { producto ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
+                Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(producto.nombre, style = MaterialTheme.typography.titleLarge)
-                        Text(producto.descripcion, style = MaterialTheme.typography.bodyMedium)
-                        Text("Precio: ${producto.precio} créditos", style = MaterialTheme.typography.bodySmall)
+                        Text(producto.descripcion)
+                        Text("Precio: ${producto.precio} créditos")
                         Text("Categoría: ${producto.categoria}", style = MaterialTheme.typography.labelSmall)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(onClick = { carritoViewModel.agregarAlCarrito(producto) }) {
+                            Text("Agregar al carrito")
+                        }
                     }
                 }
             }
@@ -76,12 +105,18 @@ fun CatalogoScreen(navController: NavHostController, productoViewModel: Producto
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Button(
             onClick = { navController.navigate(Screen.Resumen.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Volver al resumen")
+        }
+
+        Button(
+            onClick = { navController.navigate(Screen.Carrito.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ir al carrito")
         }
     }
 }

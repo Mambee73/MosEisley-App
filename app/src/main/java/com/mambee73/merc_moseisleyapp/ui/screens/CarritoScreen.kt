@@ -1,0 +1,84 @@
+package com.mambee73.merc_moseisleyapp.ui.screens
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.mambee73.merc_moseisleyapp.model.Producto
+import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+
+
+
+@Composable
+fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoViewModel) {
+    var mostrarDialogo by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Tu carrito", style = MaterialTheme.typography.headlineMedium)
+
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(carritoViewModel.carrito) { producto ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(producto.nombre, style = MaterialTheme.typography.titleLarge)
+                        Text("Precio: ${producto.precio} créditos", style = MaterialTheme.typography.bodyMedium)
+                        Text("Categoría: ${producto.categoria}", style = MaterialTheme.typography.labelSmall)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(onClick = { carritoViewModel.quitarDelCarrito(producto) }) {
+                            Text("Quitar del carrito")
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Total: ${carritoViewModel.calcularTotal()} créditos",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Button(
+            onClick = { mostrarDialogo = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Pagar")
+        }
+
+        if (mostrarDialogo) {
+            AlertDialog(
+                onDismissRequest = { mostrarDialogo = false },
+                title = { Text("¡Toma asiento comprador!") },
+                text = { Text("Redirigiendo a entidad bancaria intergaláctica...") },
+                confirmButton = {
+                    Button(onClick = {
+                        mostrarDialogo = false
+                        carritoViewModel.vaciarCarrito()
+                        navController.navigate(Screen.Home.route)
+                    }) {
+                        Text("Aceptar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { mostrarDialogo = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
+    }
+}

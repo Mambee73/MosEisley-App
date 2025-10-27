@@ -8,8 +8,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
-import com.mambee73.merc_moseisleyapp.ui.screens.SubirProductoScreen
-
 
 @Composable
 fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {
@@ -41,13 +39,17 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
         }
 
         Button(
+            onClick = { navController.navigate(Screen.Carrito.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ir al carrito")
+        }
+
+        Button(
             onClick = { navController.navigate(Screen.Home.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Salir al inicio")
         }
-
-
-
     }
 }
