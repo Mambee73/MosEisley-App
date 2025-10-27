@@ -1,43 +1,50 @@
 package com.mambee73.merc_moseisleyapp.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+// Paleta inspirada en Mos Eisley
+val TatooineSand = Color(0xFFD2B48C)
+val RustMetal = Color(0xFF8B5E3C)
+val CantinaGlow = Color(0xFFFFD700)
+val BlasterGray = Color(0xFF4B4B4B)
+val NeonCyan = Color(0xFF00FFFF)
+val DarkSky = Color(0xFF1A1A1A)
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = CantinaGlow,
+    secondary = NeonCyan,
+    tertiary = RustMetal,
+    background = DarkSky,
+    surface = DarkSky,
+    onPrimary = Color.Black,
+    onSecondary = Color.Black,
+    onTertiary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = RustMetal,
+    secondary = NeonCyan,
+    tertiary = CantinaGlow,
+    background = TatooineSand,
+    surface = TatooineSand,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    onSecondary = Color.Black,
+    onTertiary = Color.Black,
+    onBackground = BlasterGray,
+    onSurface = BlasterGray
 )
 
 @Composable
 fun MercMosEisleyAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Desactivado para mantener tu paleta personalizada
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
