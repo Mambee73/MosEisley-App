@@ -1,9 +1,11 @@
 package com.mambee73.merc_moseisleyapp.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,9 +14,16 @@ import com.mambee73.merc_moseisleyapp.model.Producto
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubirProductoScreen(navController: NavHostController, productoViewModel: ProductoViewModel) {
-    val categoriasDisponibles = listOf(
+    var nombre by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var precio by remember { mutableStateOf("") }
+    var categoria by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    val categorias = listOf(
         "Ropa",
         "Libros/Cómics/Revistas",
         "Artículos Tecnológicos",
@@ -23,10 +32,12 @@ fun SubirProductoScreen(navController: NavHostController, productoViewModel: Pro
         "Videojuegos/Holo-Juegos"
     )
 
-    var nombre by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
-    var precio by remember { mutableStateOf("") }
-    var categoriaSeleccionada by remember { mutableStateOf("") }
+    val nombreValido = nombre.isNotBlank()
+    val descripcionValida = descripcion.isNotBlank()
+    val precioValido = precio.toDoubleOrNull()?.let { it > 0 } ?: false
+    val categoriaValida = categoria.isNotBlank()
+
+    val formularioValido = nombreValido && descripcionValida && precioValido && categoriaValida
 
     Column(
         modifier = Modifier
@@ -34,58 +45,68 @@ fun SubirProductoScreen(navController: NavHostController, productoViewModel: Pro
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Publicar producto en la cantina", style = MaterialTheme.typography.headlineMedium)
+        Text("Subir producto", style = MaterialTheme.typography.headlineMedium)
 
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre del producto") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
+        if (!nombreValido && nombre.isNotBlank()) {
+            Text("El nombre no puede estar vacío", color = MaterialTheme.colorScheme.error)
+        }
 
-        OutlinedTextField(
-            value = descripcion,
-            onValueChange = { descripcion = it },
-            label = { Text("Descripción") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        OutlinedTextField(value = descripcion, onValueChange = { descripcion = it }, label = { Text("Descripción") })
+        if (!descripcionValida && descripcion.isNotBlank()) {
+            Text("La descripción no puede estar vacía", color = MaterialTheme.colorScheme.error)
+        }
 
-        OutlinedTextField(
-            value = precio,
-            onValueChange = { precio = it },
-            label = { Text("Precio en créditos") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        OutlinedTextField(value = precio, onValueChange = { precio = it }, label = { Text("Precio") })
+        if (!precioValido && precio.isNotBlank()) {
+            Text("Precio inválido. Debe ser un número positivo.", color = MaterialTheme.colorScheme.error)
+        }
 
-        Text("Selecciona una categoría", style = MaterialTheme.typography.titleMedium)
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
         ) {
-            items(categoriasDisponibles) { categoria ->
-                FilterChip(
-                    selected = categoria == categoriaSeleccionada,
-                    onClick = { categoriaSeleccionada = categoria },
-                    label = { Text(categoria) }
-                )
+            OutlinedTextField(
+                value = categoria,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Categoría") },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                categorias.forEach { opcion ->
+                    DropdownMenuItem(
+                        text = { Text(opcion) },
+                        onClick = {
+                            categoria = opcion
+                            expanded = false
+                        }
+                    )
+                }
             }
+        }
+
+        if (!categoriaValida) {
+            Text("Debes seleccionar una categoría", color = MaterialTheme.colorScheme.error)
         }
 
         Button(
             onClick = {
-                val nuevoProducto = Producto(
-                    nombre = nombre,
-                    descripcion = descripcion,
-                    precio = precio.toDoubleOrNull() ?: 0.0,
-                    categoria = categoriaSeleccionada
-                )
+                val nuevoProducto = Producto(nombre, descripcion, precio.toDouble(), categoria)
                 productoViewModel.agregarProducto(nuevoProducto)
                 navController.navigate(Screen.Catalogo.route)
             },
+            enabled = formularioValido,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Guardar producto")
+            Text("Subir producto")
         }
     }
 }

@@ -4,8 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class UsuarioViewModel : ViewModel() {
-    var nombre = mutableStateOf("")
-    var correo = mutableStateOf("")
-    var clave = mutableStateOf("")
-    var carga = mutableStateOf("")
+    val nombre = mutableStateOf("")
+    val correo = mutableStateOf("")
+    val clave = mutableStateOf("")
+    val carga = mutableStateOf("")
+    val imagenUri = mutableStateOf<String?>(null)
 }

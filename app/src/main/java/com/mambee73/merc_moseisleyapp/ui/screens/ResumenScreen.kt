@@ -1,11 +1,15 @@
 package com.mambee73.merc_moseisleyapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 
@@ -18,6 +22,16 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Ticket De Entrada", style = MaterialTheme.typography.headlineMedium)
+
+        usuarioViewModel.imagenUri.value?.let { uri ->
+            AsyncImage(
+                model = uri,
+                contentDescription = "Imagen de perfil",
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
+            )
+        }
 
         Text("Nombre: ${usuarioViewModel.nombre.value}")
         Text("Correo: ${usuarioViewModel.correo.value}")
@@ -46,6 +60,13 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
         }
 
         Button(
+            onClick = { navController.navigate(Screen.EditarPerfil.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Editar perfil")
+        }
+
+        Button(
             onClick = { navController.navigate(Screen.Home.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -53,3 +74,4 @@ fun ResumenScreen(navController: NavHostController, usuarioViewModel: UsuarioVie
         }
     }
 }
+

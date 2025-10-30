@@ -49,5 +49,10 @@ fun AppNavigation(
         composable(Screen.Carrito.route) {
             CarritoScreen(navController, carritoViewModel)
         }
+
+        composable(Screen.EditarPerfil.route) {
+            EditarPerfilScreen(navController, usuarioViewModel)
+        }
+
     }
 }
