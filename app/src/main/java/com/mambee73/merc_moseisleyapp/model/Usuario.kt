@@ -1,13 +1,9 @@
 package com.mambee73.merc_moseisleyapp.model
 
-data class Producto(
+data class Usuario(
     val id: Int,
     val nombre: String,
-    val descripcion: String,
-    val precio: Double,
-    val categoria: String,
+    val correo: String,
+    val clave: String,
     val imagenUri: String? = null
 )
-
-
-

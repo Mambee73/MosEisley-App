@@ -9,6 +9,9 @@ import com.mambee73.merc_moseisleyapp.ui.screens.*
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+
 
 @Composable
 fun AppNavigation(
@@ -53,6 +56,15 @@ fun AppNavigation(
         composable(Screen.EditarPerfil.route) {
             EditarPerfilScreen(navController, usuarioViewModel)
         }
+
+        composable(
+            route = Screen.ProductDetail.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            ProductDetailScreen(navController, productoViewModel, id)
+        }
+
 
     }
 }

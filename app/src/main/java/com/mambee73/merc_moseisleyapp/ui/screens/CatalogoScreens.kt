@@ -1,5 +1,6 @@
 package com.mambee73.merc_moseisleyapp.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -9,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.mambee73.merc_moseisleyapp.model.Producto
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
@@ -86,10 +86,17 @@ fun CatalogoScreen(
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(productosFiltrados) { producto ->
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            // 🔹 Navegar al detalle con el id del producto
+                            navController.navigate(Screen.ProductDetail.createRoute(producto.id))
+                        }
+                ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(producto.nombre, style = MaterialTheme.typography.titleLarge)
-                        Text(producto.descripcion)
+                        Text(producto.descripcion, maxLines = 2) // resumen corto
                         Text("Precio: ${producto.precio} créditos")
                         Text("Categoría: ${producto.categoria}", style = MaterialTheme.typography.labelSmall)
 

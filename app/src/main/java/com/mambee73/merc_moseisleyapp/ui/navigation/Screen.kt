@@ -14,9 +14,10 @@ sealed class Screen(val route: String) {
 
     object EditarPerfil : Screen("editar_perfil")
 
-
-
-
+    object ProductDetail : Screen("product_detail/{id}") {
+        fun createRoute(id: Int) = "product_detail/$id"
+    }
 }
+
 
 
