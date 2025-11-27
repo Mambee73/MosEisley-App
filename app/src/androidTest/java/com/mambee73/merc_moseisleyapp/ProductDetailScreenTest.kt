@@ -6,35 +6,34 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.navigation.testing.TestNavHostController
 import androidx.navigation.compose.ComposeNavigator
-import com.mambee73.merc_moseisleyapp.ui.screens.CatalogoScreen
+import com.mambee73.merc_moseisleyapp.ui.screens.ProductDetailScreen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 import org.junit.Rule
 import org.junit.Test
 
-class CatalogoScreenTest {
+class ProductDetailScreenTest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun titulo_catalogo_debe_aparecer() {
+    fun muestra_placeholder_si_no_hay_imagen() {
         val productoVM = ProductoViewModel()
-        val carritoVM = CarritoViewModel()
+        val producto = productoVM.obtenerProductoPorId(1)!! // Poncho estilo Tatooine
 
         val navController = TestNavHostController(composeRule.activity).apply {
             navigatorProvider.addNavigator(ComposeNavigator())
         }
 
         composeRule.setContent {
-            CatalogoScreen(
+            ProductDetailScreen(
                 navController = navController,
                 productoViewModel = productoVM,
-                carritoViewModel = carritoVM
+                productoId = producto.id
             )
         }
 
-        // Validar que el título aparece
-        composeRule.onNodeWithText("Catálogo Mos Eisley").assertIsDisplayed()
+        // Validar que aparece el texto de placeholder
+        composeRule.onNodeWithText("Sin imagen disponible").assertIsDisplayed()
     }
 }

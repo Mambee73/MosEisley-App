@@ -6,6 +6,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.navigation.testing.TestNavHostController
+import androidx.navigation.compose.ComposeNavigator
 import com.mambee73.merc_moseisleyapp.ui.screens.LoginScreen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
 import org.junit.Rule
@@ -20,8 +22,12 @@ class LoginScreenTest {
     fun muestra_error_si_login_incorrecto() {
         val usuarioVM = UsuarioViewModel()
 
+        val navController = TestNavHostController(composeRule.activity).apply {
+            navigatorProvider.addNavigator(ComposeNavigator())
+        }
+
         composeRule.setContent {
-            LoginScreen(usuarioViewModel = usuarioVM, navController = androidx.navigation.testing.TestNavHostController(composeRule.activity))
+            LoginScreen(usuarioViewModel = usuarioVM, navController = navController)
         }
 
         // Simular ingreso de credenciales incorrectas
