@@ -9,10 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.mambee73.merc_moseisleyapp.model.Producto
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 
+// Pantalla para mostrar el carrito de compras
 @Composable
 fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoViewModel) {
     var mostrarDialogo by remember { mutableStateOf(false) }
@@ -26,6 +26,7 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
         ) {
             Text("Tu carrito", style = MaterialTheme.typography.headlineMedium)
 
+            // Lista de productos en el carrito
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -56,7 +57,7 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
             )
         }
 
-        // ✅ Botones fijos al fondo
+        // Botones fijos al fondo
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -79,6 +80,7 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
             }
         }
 
+        // Diálogo de confirmación de pago
         if (mostrarDialogo) {
             AlertDialog(
                 onDismissRequest = { mostrarDialogo = false },
@@ -102,3 +104,4 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
         }
     }
 }
+

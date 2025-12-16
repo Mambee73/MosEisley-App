@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
 @Composable
 fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {

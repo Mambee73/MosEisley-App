@@ -13,7 +13,9 @@ import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import androidx.compose.runtime.collectAsState
 
+// Pantalla para mostrar catálogo de productos
 @Composable
 fun CatalogoScreen(
     navController: NavHostController,
@@ -23,7 +25,11 @@ fun CatalogoScreen(
     var categoriaSeleccionada by remember { mutableStateOf("") }
     var textoBusqueda by remember { mutableStateOf("") }
 
-    val productosFiltrados = productoViewModel.productos.filter { producto ->
+    // Observa el StateFlow de productos
+    val productos by productoViewModel.productos.collectAsState()
+
+    // Filtrar productos según categoría y búsqueda
+    val productosFiltrados = productos.filter { producto ->
         val coincideCategoria = categoriaSeleccionada.isEmpty() ||
                 producto.categoria.startsWith(categoriaSeleccionada, ignoreCase = true)
 
@@ -40,7 +46,7 @@ fun CatalogoScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Catálogo Mos Eisley", style = MaterialTheme.typography.headlineMedium)
-        Text("Productos cargados: ${productoViewModel.productos.size}")
+        Text("Productos cargados: ${productos.size}")
 
         OutlinedTextField(
             value = textoBusqueda,
@@ -90,13 +96,12 @@ fun CatalogoScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            // 🔹 Navegar al detalle con el id del producto
                             navController.navigate(Screen.ProductDetail.createRoute(producto.id))
                         }
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(producto.nombre, style = MaterialTheme.typography.titleLarge)
-                        Text(producto.descripcion, maxLines = 2) // resumen corto
+                        Text(producto.descripcion, maxLines = 2)
                         Text("Precio: ${producto.precio} créditos")
                         Text("Categoría: ${producto.categoria}", style = MaterialTheme.typography.labelSmall)
 
@@ -127,3 +132,4 @@ fun CatalogoScreen(
         }
     }
 }
+

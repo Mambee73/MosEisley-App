@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
 @Composable
 fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {

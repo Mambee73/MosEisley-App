@@ -1,73 +1,46 @@
-package com.mambee73.merc_moseisleyapp.ui.viewmodels
+package com.mambee73.merc_moseisleyapp.ui.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mambee73.merc_moseisleyapp.model.Producto
+import com.mambee73.merc_moseisleyapp.repository.ProductoRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class ProductoViewModel : ViewModel() {
-    val productos = mutableStateListOf<Producto>()
-    private var nextId = 1
+// ViewModel para manejar productos
+// Se conecta al repositorio y expone el estado a la UI
+class ProductoViewModel(
+    private val repository: ProductoRepository = ProductoRepository()
+) : ViewModel() {
 
-    init {
-        cargarProductosIniciales()
+    // Estado con la lista de productos (observable en Compose)
+    private val _productos = MutableStateFlow<List<Producto>>(emptyList())
+    val productos: StateFlow<List<Producto>> = _productos
+
+    // Cargar productos desde el backend
+    fun fetchProductos() {
+        viewModelScope.launch {
+            try {
+                val lista = repository.getProductos()
+                _productos.value = lista
+            } catch (e: Exception) {
+                // Si hay error, dejamos la lista vacía
+                _productos.value = emptyList()
+            }
+        }
     }
 
-    private fun cargarProductosIniciales() {
-        productos.addAll(
-            listOf(
-                Producto(
-                    id = nextId++,
-                    nombre = "Poncho estilo Tatooine",
-                    descripcion = "Tela rústica con protección solar, usado por comerciantes del Borde Exterior.",
-                    precio = 150.0,
-                    categoria = "Ropa"
-                ),
-                Producto(
-                    id = nextId++,
-                    nombre = "Revista 'Holo-Cultura Galáctica'",
-                    descripcion = "Edición mensual con relatos del Núcleo y reseñas de cómics interplanetarios.",
-                    precio = 45.0,
-                    categoria = "Libros/Cómics/Revistas"
-                ),
-                Producto(
-                    id = nextId++,
-                    nombre = "Gadget de rastreo orbital",
-                    descripcion = "Dispositivo real con GPS modificado para simulaciones galácticas.",
-                    precio = 320.0,
-                    categoria = "Artículos Tecnológicos"
-                ),
-                Producto(
-                    id = nextId++,
-                    nombre = "Set de dados de Sabacc sellado",
-                    descripcion = "Juego de mesa galáctico, nuevo en caja con holograma intacto.",
-                    precio = 90.0,
-                    categoria = "Cosas Nuevas/Cerradas"
-                ),
-                Producto(
-                    id = nextId++,
-                    nombre = "Cantimplora de explorador de Endor",
-                    descripcion = "Objeto usado en simulaciones de terreno, con marcas de uso auténticas.",
-                    precio = 60.0,
-                    categoria = "Artículos de Segunda Mano/Curiosos"
-                ),
-                Producto(
-                    id = nextId++,
-                    nombre = "Holo-Juego 'Batalla de Scarif'",
-                    descripcion = "Juego táctico multijugador con escenarios 3D y modo historia desbloqueable.",
-                    precio = 220.0,
-                    categoria = "Videojuegos/Holo-Juegos"
-                )
-            )
-        )
+    // Subir un producto nuevo al backend
+    fun addProducto(producto: Producto) {
+        viewModelScope.launch {
+            try {
+                val nuevo = repository.postProducto(producto)
+                // Actualizamos la lista agregando el nuevo producto
+                _productos.value = _productos.value + nuevo
+            } catch (e: Exception) {
+                // Si falla, no se actualiza la lista
+            }
+        }
     }
-
-    // Agregar producto nuevo con ID automático
-    fun agregarProducto(producto: Producto) {
-        productos.add(producto.copy(id = nextId++))
-    }
-
-    // Buscar producto por ID
-    fun obtenerProductoPorId(id: Int): Producto? =
-        productos.firstOrNull { it.id == id }
 }
-

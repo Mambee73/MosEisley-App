@@ -3,14 +3,15 @@ package com.mambee73.merc_moseisleyapp.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mambee73.merc_moseisleyapp.ui.screens.*
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mambee73.merc_moseisleyapp.ui.RegistroScreen
+import com.mambee73.merc_moseisleyapp.ui.screens.*
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
 
 @Composable

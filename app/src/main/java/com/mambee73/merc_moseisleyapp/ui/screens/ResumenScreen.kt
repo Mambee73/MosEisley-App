@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 
 @Composable
