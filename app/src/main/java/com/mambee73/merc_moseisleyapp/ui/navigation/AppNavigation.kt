@@ -1,5 +1,6 @@
 package com.mambee73.merc_moseisleyapp.ui.navigation
 
+
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -7,12 +8,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.mambee73.merc_moseisleyapp.ui.RegistroScreen
 import com.mambee73.merc_moseisleyapp.ui.screens.*
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.ProductoViewModel
 import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
-
 
 @Composable
 fun AppNavigation(
@@ -39,7 +38,7 @@ fun AppNavigation(
         }
 
         composable(Screen.Resumen.route) {
-            ResumenScreen(navController, usuarioViewModel)
+            ResumenScreen(navController, usuarioViewModel, productoViewModel)
         }
 
         composable(Screen.Catalogo.route) {
@@ -58,6 +57,10 @@ fun AppNavigation(
             EditarPerfilScreen(navController, usuarioViewModel)
         }
 
+        composable(Screen.VerPerfil.route) {
+            VerPerfilScreen(navController, usuarioViewModel)
+        }
+
         composable(
             route = Screen.ProductDetail.route,
             arguments = listOf(navArgument("id") { type = NavType.IntType })
@@ -65,7 +68,5 @@ fun AppNavigation(
             val id = backStackEntry.arguments?.getInt("id") ?: return@composable
             ProductDetailScreen(navController, productoViewModel, id)
         }
-
-
     }
 }

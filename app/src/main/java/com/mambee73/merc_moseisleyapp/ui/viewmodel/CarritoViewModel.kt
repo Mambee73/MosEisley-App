@@ -1,31 +1,35 @@
-package com.mambee73.merc_moseisleyapp.ui.viewmodels
+package com.mambee73.merc_moseisleyapp.ui.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.mambee73.merc_moseisleyapp.model.Producto
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 // ViewModel para manejar el carrito de compras
 class CarritoViewModel : ViewModel() {
-    // Lista de productos en el carrito
-    val carrito = mutableStateListOf<Producto>()
+
+    // Lista de productos en el carrito como StateFlow
+    private val _carrito = MutableStateFlow<List<Producto>>(emptyList())
+    val carrito: StateFlow<List<Producto>> = _carrito
 
     // Agregar producto al carrito
     fun agregarAlCarrito(producto: Producto) {
-        carrito.add(producto)
+        _carrito.value = _carrito.value + producto
     }
 
     // Quitar producto del carrito
     fun quitarDelCarrito(producto: Producto) {
-        carrito.remove(producto)
+        _carrito.value = _carrito.value - producto
     }
 
     // Calcular el total del carrito (sumando precios)
     fun calcularTotal(): Double {
-        return carrito.sumOf { it.precio }
+        return _carrito.value.sumOf { it.precio }
     }
 
     // Vaciar el carrito (eliminar todos los productos)
     fun vaciarCarrito() {
-        carrito.clear()
+        _carrito.value = emptyList()
     }
 }
+

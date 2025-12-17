@@ -18,8 +18,10 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
+// Pantalla para editar el perfil del usuario
 @Composable
 fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {
+    // Estados iniciales con los datos del usuario
     var nombre by remember { mutableStateOf(usuarioViewModel.nombre.value) }
     var correo by remember { mutableStateOf(usuarioViewModel.correo.value) }
     var clave by remember { mutableStateOf(usuarioViewModel.clave.value) }
@@ -27,19 +29,19 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
 
     var capturedImage by remember { mutableStateOf<Bitmap?>(null) }
 
-    // 🔹 Launcher para abrir galería
+    // Abrir galería
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { usuarioViewModel.imagenUri.value = it.toString() }
-        capturedImage = null // si viene de galería, limpiamos la foto previa
+        capturedImage = null
     }
 
-    // 🔹 Launcher para abrir cámara
+    // Abrir cámara
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
         capturedImage = bitmap
-        usuarioViewModel.imagenUri.value = null // si viene de cámara, limpiamos el uri
+        usuarioViewModel.imagenUri.value = null
     }
 
-    // Validaciones
+    // Validaciones básicas
     val nombreValido = nombre.isNotBlank()
     val correoValido = correo.contains("@") && correo.contains(".")
     val claveValida = clave.length >= 6
@@ -88,7 +90,7 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
             }
         }
 
-        // Nombre
+        // Campo Nombre
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
@@ -100,7 +102,7 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
             Text("El nombre no puede estar vacío", color = MaterialTheme.colorScheme.error)
         }
 
-        // Correo
+        // Campo Correo
         OutlinedTextField(
             value = correo,
             onValueChange = { correo = it },
@@ -112,7 +114,7 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
             Text("Correo inválido", color = MaterialTheme.colorScheme.error)
         }
 
-        // Clave
+        // Campo Clave
         OutlinedTextField(
             value = clave,
             onValueChange = { clave = it },
@@ -124,7 +126,7 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
             Text("La clave debe tener al menos 6 caracteres", color = MaterialTheme.colorScheme.error)
         }
 
-        // Carga
+        // Campo Carga
         OutlinedTextField(
             value = carga,
             onValueChange = { carga = it },
@@ -154,4 +156,3 @@ fun EditarPerfilScreen(navController: NavHostController, usuarioViewModel: Usuar
         }
     }
 }
-

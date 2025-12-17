@@ -11,16 +11,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.ProductoViewModel
 
+// Pantalla para mostrar el detalle de un producto
 @Composable
 fun ProductDetailScreen(
     navController: NavHostController,
     productoViewModel: ProductoViewModel,
     productoId: Int
 ) {
-    val producto = productoViewModel.obtenerProductoPorId(productoId)
+    // Buscar producto por id en el ViewModel
+    val producto = productoViewModel.productos.value.find { it.id == productoId }
 
+    // Si no se encuentra el producto
     if (producto == null) {
         Box(
             modifier = Modifier
@@ -39,6 +42,7 @@ fun ProductDetailScreen(
         return
     }
 
+    // Si el producto existe, mostrar detalle
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -84,6 +88,7 @@ fun ProductDetailScreen(
                     }
                 }
 
+                // Nombre del producto
                 Text(
                     text = producto.nombre,
                     style = MaterialTheme.typography.titleLarge,
@@ -91,16 +96,19 @@ fun ProductDetailScreen(
                     overflow = TextOverflow.Ellipsis
                 )
 
+                // Descripción
                 Text(
                     text = producto.descripcion,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
+                // Precio
                 Text(
-                    text = "Precio: $${producto.precio}",
+                    text = "Precio: ${producto.precio} créditos",
                     style = MaterialTheme.typography.titleMedium
                 )
 
+                // Categoría
                 AssistChip(
                     onClick = { /* no-op */ },
                     label = { Text(producto.categoria) }
@@ -108,6 +116,7 @@ fun ProductDetailScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botón para volver al catálogo
                 Button(
                     onClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxWidth()

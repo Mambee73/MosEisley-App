@@ -1,5 +1,6 @@
 package com.mambee73.merc_moseisleyapp.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mambee73.merc_moseisleyapp.model.Producto
@@ -8,38 +9,42 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-// ViewModel para manejar productos
-// Se conecta al repositorio y expone el estado a la UI
 class ProductoViewModel(
     private val repository: ProductoRepository = ProductoRepository()
 ) : ViewModel() {
 
-    // Estado con la lista de productos (observable en Compose)
     private val _productos = MutableStateFlow<List<Producto>>(emptyList())
     val productos: StateFlow<List<Producto>> = _productos
 
-    // Cargar productos desde el backend
     fun fetchProductos() {
         viewModelScope.launch {
             try {
-                val lista = repository.getProductos()
-                _productos.value = lista
+                val response = repository.getProductos()
+                if (response.isSuccessful) {
+                    _productos.value = response.body() ?: emptyList()
+                    Log.d("API", "Productos recibidos: ${response.body()}")
+                } else {
+                    Log.e("API", "Error al obtener productos: ${response.code()} - ${response.message()}")
+                }
             } catch (e: Exception) {
-                // Si hay error, dejamos la lista vacía
+                Log.e("API", "Excepción al obtener productos", e)
                 _productos.value = emptyList()
             }
         }
     }
 
-    // Subir un producto nuevo al backend
     fun addProducto(producto: Producto) {
         viewModelScope.launch {
             try {
-                val nuevo = repository.postProducto(producto)
-                // Actualizamos la lista agregando el nuevo producto
-                _productos.value = _productos.value + nuevo
+                val response = repository.postProducto(producto)
+                if (response.isSuccessful) {
+                    Log.d("API", "Producto agregado: ${response.body()}")
+                    fetchProductos()
+                } else {
+                    Log.e("API", "Error al agregar producto: ${response.code()} - ${response.message()}")
+                }
             } catch (e: Exception) {
-                // Si falla, no se actualiza la lista
+                Log.e("API", "Excepción al agregar producto", e)
             }
         }
     }

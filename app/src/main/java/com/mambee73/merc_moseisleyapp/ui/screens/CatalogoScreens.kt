@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.ProductoViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 
-// Pantalla para mostrar catálogo de productos
 @Composable
 fun CatalogoScreen(
     navController: NavHostController,
@@ -25,24 +25,24 @@ fun CatalogoScreen(
     var categoriaSeleccionada by remember { mutableStateOf("") }
     var textoBusqueda by remember { mutableStateOf("") }
 
-    // Observa el StateFlow de productos
     val productos by productoViewModel.productos.collectAsState()
+    val carrito by carritoViewModel.carrito.collectAsState() // 👈 observar el carrito
 
-    // Filtrar productos según categoría y búsqueda
+    // refrescar productos al entrar
+    LaunchedEffect(Unit) {
+        productoViewModel.fetchProductos()
+    }
+
     val productosFiltrados = productos.filter { producto ->
         val coincideCategoria = categoriaSeleccionada.isEmpty() ||
                 producto.categoria.startsWith(categoriaSeleccionada, ignoreCase = true)
-
         val coincideBusqueda = textoBusqueda.isEmpty() ||
                 producto.nombre.contains(textoBusqueda, ignoreCase = true)
-
         coincideCategoria && coincideBusqueda
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Catálogo Mos Eisley", style = MaterialTheme.typography.headlineMedium)
@@ -64,10 +64,7 @@ fun CatalogoScreen(
             "Videojuegos/Holo-Juegos"
         )
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
             items(categorias) { categoria ->
                 FilterChip(
                     selected = categoriaSeleccionada == categoria,
@@ -79,10 +76,7 @@ fun CatalogoScreen(
             }
         }
 
-        Button(onClick = {
-            categoriaSeleccionada = ""
-            textoBusqueda = ""
-        }) {
+        Button(onClick = { categoriaSeleccionada = ""; textoBusqueda = "" }) {
             Text("Mostrar todos los productos")
         }
 
@@ -93,11 +87,11 @@ fun CatalogoScreen(
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(productosFiltrados) { producto ->
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate(Screen.ProductDetail.createRoute(producto.id))
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        producto.id?.let { id ->
+                            navController.navigate(Screen.ProductDetail.createRoute(id))
                         }
+                    }
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(producto.nombre, style = MaterialTheme.typography.titleLarge)
@@ -124,12 +118,12 @@ fun CatalogoScreen(
             Text("Volver al resumen")
         }
 
+        // 👇 Botón para ver el carrito con contador
         Button(
             onClick = { navController.navigate(Screen.Carrito.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Ir al carrito")
+            Text("Ir al carrito (${carrito.size} items)")
         }
     }
 }
-

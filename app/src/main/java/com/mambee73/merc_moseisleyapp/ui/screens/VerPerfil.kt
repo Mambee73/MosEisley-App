@@ -10,24 +10,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodel.ProductoViewModel
+
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 
 @Composable
-fun ResumenScreen(
+fun VerPerfilScreen(
     navController: NavHostController,
-    usuarioViewModel: UsuarioViewModel,
-    productoViewModel: ProductoViewModel
+    usuarioViewModel: UsuarioViewModel
 ) {
     val usuarios by usuarioViewModel.usuarios.collectAsState()
-    val productos by productoViewModel.productos.collectAsState()
 
     LaunchedEffect(Unit) {
         usuarioViewModel.fetchUsuarios()
-        productoViewModel.fetchProductos()
     }
 
     Column(
@@ -37,7 +33,7 @@ fun ResumenScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Resumen del perfil", style = MaterialTheme.typography.headlineMedium)
+        Text("Perfil del Usuario", style = MaterialTheme.typography.headlineMedium)
 
         if (usuarios.isNotEmpty()) {
             val ultimoUsuario = usuarios.last()
@@ -48,7 +44,7 @@ fun ResumenScreen(
                     .size(120.dp)
                     .clip(CircleShape)
             )
-            Text("Usuario: ${ultimoUsuario.nombre}")
+            Text("Nombre: ${ultimoUsuario.nombre}")
             Text("Correo: ${ultimoUsuario.correo}")
             Text("Carga: ${ultimoUsuario.carga ?: "Sin carga"}")
         } else {
@@ -57,29 +53,11 @@ fun ResumenScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🔥 Menú de opciones
-        Button(onClick = { navController.navigate(Screen.VerPerfil.route) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Ver perfil")
-        }
-        Button(onClick = { navController.navigate(Screen.EditarPerfil.route) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Editar perfil")
-        }
-        Button(onClick = { navController.navigate(Screen.Catalogo.route) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Entrar a la cantina")
-        }
-        Button(onClick = { navController.navigate(Screen.Carrito.route) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Carrito")
-        }
-        Button(onClick = { navController.navigate(Screen.SubirProducto.route) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Subir producto")
-        }
         Button(
-            onClick = { navController.navigate(Screen.Login.route) },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Cerrar sesión")
+            Text("Volver")
         }
     }
 }
-

@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.R
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 
+// Pantalla inicial de la aplicación
 @Composable
 fun HomeScreen(navController: NavHostController) {
     var mostrarDialogo by remember { mutableStateOf(false) }
@@ -22,7 +23,7 @@ fun HomeScreen(navController: NavHostController) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // Imagen decorativa (opcional)
+        // Imagen decorativa (logo o banner)
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Banner Mos Eisley",
@@ -32,6 +33,7 @@ fun HomeScreen(navController: NavHostController) {
             contentScale = ContentScale.Crop
         )
 
+        // Texto de bienvenida
         Text(
             text = "Bienvenido a Mos Eisley",
             style = MaterialTheme.typography.headlineMedium
@@ -42,10 +44,12 @@ fun HomeScreen(navController: NavHostController) {
             style = MaterialTheme.typography.bodyLarge
         )
 
+        // Botón principal
         Button(onClick = { mostrarDialogo = true }) {
             Text("Explorar rarezas interplanetarias")
         }
 
+        // Diálogo de confirmación antes de entrar
         if (mostrarDialogo) {
             AlertDialog(
                 onDismissRequest = { mostrarDialogo = false },
@@ -68,3 +72,4 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 }
+

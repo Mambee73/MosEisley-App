@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
+// Pantalla de inicio de sesión
 @Composable
 fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {
     var usuario by remember { mutableStateOf("") }
@@ -17,9 +18,10 @@ fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewM
     var showDialog by remember { mutableStateOf(false) }
     var showClaveError by remember { mutableStateOf(false) }
 
-    // Simulación de usuario válido (esto luego se reemplaza con API REST)
-    val usuarioEsperado = "Usuario1"
-    val claveEsperada = "mos123"
+    // 👇 Traer usuarios del backend al abrir la pantalla
+    LaunchedEffect(Unit) {
+        usuarioViewModel.fetchUsuarios()
+    }
 
     Box(
         modifier = Modifier
@@ -59,16 +61,18 @@ fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewM
                 // Botón Entrar
                 Button(
                     onClick = {
-                        if (usuario == usuarioEsperado && clave == claveEsperada) {
+                        val valido = usuarioViewModel.login(usuario, clave)
+                        if (valido) {
                             usuarioViewModel.nombre.value = usuario
                             usuarioViewModel.clave.value = clave
                             showDialog = false
                             showClaveError = false
                             navController.navigate(Screen.Resumen.route)
                         } else {
-                            if (usuario != usuarioEsperado) {
-                                showDialog = true // 🔹 Mostrar ventana emergente
-                            } else if (clave != claveEsperada) {
+                            val usuarioExiste = usuarioViewModel.usuarios.value.any { it.nombre == usuario }
+                            if (!usuarioExiste) {
+                                showDialog = true // Mostrar ventana emergente
+                            } else {
                                 showClaveError = true
                             }
                         }
@@ -78,7 +82,7 @@ fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewM
                     Text("Entrar")
                 }
 
-                // Error de clave incorrecta (solo texto debajo del botón)
+                // Mensaje de error si la clave es incorrecta
                 if (showClaveError) {
                     Text(
                         text = "La clave es incorrecta.",
@@ -86,7 +90,7 @@ fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewM
                     )
                 }
 
-                // Botón para ir a Registro (siempre visible)
+                // Botón para ir a Registro
                 TextButton(
                     onClick = { navController.navigate(Screen.Registro.route) },
                     modifier = Modifier.fillMaxWidth()
@@ -96,7 +100,7 @@ fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewM
             }
         }
 
-        //Ventana emergente cuando el usuario no existe
+        // Ventana emergente cuando el usuario no existe
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },

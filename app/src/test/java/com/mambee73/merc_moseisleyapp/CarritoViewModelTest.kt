@@ -1,5 +1,5 @@
 import com.mambee73.merc_moseisleyapp.model.Producto
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -11,8 +11,8 @@ class CarritoViewModelTest : StringSpec({
 
         carritoVM.agregarAlCarrito(producto)
 
-        carritoVM.carrito.size shouldBe 1
-        carritoVM.carrito.first().nombre shouldBe "Poncho"
+        carritoVM.carrito.value.size shouldBe 1
+        carritoVM.carrito.value.first().nombre shouldBe "Poncho"
     }
 
     "quitarDelCarrito debe eliminar producto" {
@@ -22,7 +22,7 @@ class CarritoViewModelTest : StringSpec({
         carritoVM.agregarAlCarrito(producto)
         carritoVM.quitarDelCarrito(producto)
 
-        carritoVM.carrito.isEmpty() shouldBe true
+        carritoVM.carrito.value.isEmpty() shouldBe true
     }
 
     "vaciarCarrito debe limpiar todos los productos" {
@@ -32,7 +32,7 @@ class CarritoViewModelTest : StringSpec({
 
         carritoVM.vaciarCarrito()
 
-        carritoVM.carrito.isEmpty() shouldBe true
+        carritoVM.carrito.value.isEmpty() shouldBe true
     }
 
     "calcularTotal debe sumar precios correctamente" {

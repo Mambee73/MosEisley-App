@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/api/") // emulador Android
+            .baseUrl("http://10.0.2.2:3000/") // emulador Android
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

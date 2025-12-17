@@ -10,12 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
 
 // Pantalla para mostrar el carrito de compras
 @Composable
 fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoViewModel) {
     var mostrarDialogo by remember { mutableStateOf(false) }
+
+    // 👇 Convertimos el StateFlow en State para Compose
+    val carrito by carritoViewModel.carrito.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -31,7 +34,7 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(carritoViewModel.carrito) { producto ->
+                items(carrito) { producto ->   // 👈 ahora carrito es List<Producto>
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(4.dp)
@@ -104,4 +107,5 @@ fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoVie
         }
     }
 }
+
 

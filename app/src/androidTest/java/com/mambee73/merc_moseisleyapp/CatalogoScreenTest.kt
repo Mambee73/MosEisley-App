@@ -7,8 +7,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.navigation.testing.TestNavHostController
 import androidx.navigation.compose.ComposeNavigator
 import com.mambee73.merc_moseisleyapp.ui.screens.CatalogoScreen
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.ProductoViewModel
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.CarritoViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.ProductoViewModel   // 👈 corregido (singular)
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel   // 👈 corregido (singular)
 import org.junit.Rule
 import org.junit.Test
 
