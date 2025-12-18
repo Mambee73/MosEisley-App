@@ -43,7 +43,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MercMosEisleyAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = isSystemInDarkTheme(), //Aquí controlo si la app se muestra en modo claro u oscuro
     dynamicColor: Boolean = false, // Desactivado para mantener tu paleta personalizada
     content: @Composable () -> Unit
 ) {

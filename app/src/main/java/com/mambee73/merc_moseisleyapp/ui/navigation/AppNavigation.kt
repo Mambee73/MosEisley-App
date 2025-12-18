@@ -1,5 +1,5 @@
 package com.mambee73.merc_moseisleyapp.ui.navigation
-
+//organizar toda la navegación de la aplicación
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,7 +17,8 @@ import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 fun AppNavigation(
     navController: NavHostController,
     productoViewModel: ProductoViewModel,
-    carritoViewModel: CarritoViewModel
+    carritoViewModel: CarritoViewModel,
+    usuarioViewModel: UsuarioViewModel
 ) {
     val usuarioViewModel: UsuarioViewModel = viewModel()
 

@@ -3,6 +3,7 @@ import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+// no encontro el texto al momento de hacer el test o no coincidia
 class CarritoViewModelTest : StringSpec({
 
     "agregarAlCarrito debe añadir producto" {

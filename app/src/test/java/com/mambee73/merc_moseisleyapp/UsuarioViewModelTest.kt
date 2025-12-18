@@ -1,4 +1,4 @@
-import com.mambee73.merc_moseisleyapp.ui.viewmodels.UsuarioViewModel
+import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

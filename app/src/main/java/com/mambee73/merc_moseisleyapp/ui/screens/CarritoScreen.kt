@@ -17,7 +17,7 @@ import com.mambee73.merc_moseisleyapp.ui.viewmodel.CarritoViewModel
 fun CarritoScreen(navController: NavHostController, carritoViewModel: CarritoViewModel) {
     var mostrarDialogo by remember { mutableStateOf(false) }
 
-    // 👇 Convertimos el StateFlow en State para Compose
+    //Converti el StateFlow en State para Compose
     val carrito by carritoViewModel.carrito.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {

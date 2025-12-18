@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -49,6 +50,7 @@ fun SubirProductoScreen(
         imageUri = null
     }
 
+    // Lista fija de categorías para la demo
     val categorias = listOf(
         "Ropa",
         "Libros/Cómics/Revistas",
@@ -122,13 +124,17 @@ fun SubirProductoScreen(
             isError = !precioValido
         )
 
+        // Dropdown de categorías corregido
         ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
             OutlinedTextField(
                 value = categoria,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Categoría") },
-                modifier = Modifier.fillMaxWidth().menuAnchor(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+                    .clickable { expanded = true }, // 👈 habilita el click
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 isError = !categoriaValida
             )
@@ -148,7 +154,7 @@ fun SubirProductoScreen(
             onClick = {
                 val nuevoProducto = Producto(
                     id = 0,
-                    nombre = nombre.trim(), // 👈 aseguramos que no sea vacío
+                    nombre = nombre.trim(),
                     descripcion = descripcion.trim(),
                     precio = precio.toDoubleOrNull() ?: 0.0,
                     categoria = categoria,
@@ -164,3 +170,4 @@ fun SubirProductoScreen(
         }
     }
 }
+

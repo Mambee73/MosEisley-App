@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import com.mambee73.merc_moseisleyapp.ui.navigation.Screen
 import com.mambee73.merc_moseisleyapp.ui.viewmodel.UsuarioViewModel
 
-// Pantalla de inicio de sesión
+// Pantalla de inicio de sesión LoginScreen valida credenciales,
 @Composable
 fun LoginScreen(navController: NavHostController, usuarioViewModel: UsuarioViewModel) {
     var usuario by remember { mutableStateOf("") }

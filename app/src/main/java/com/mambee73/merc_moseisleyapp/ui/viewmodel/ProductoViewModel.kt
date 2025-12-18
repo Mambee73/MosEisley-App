@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ProductoViewModel(
+class ProductoViewModel( //gestiona productos y filtros
     private val repository: ProductoRepository = ProductoRepository()
 ) : ViewModel() {
 

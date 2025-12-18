@@ -1,6 +1,7 @@
 package com.mambee73.merc_moseisleyapp.model
 
-import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.SerializedName //inibir errores al mapear archivos json a obj kotlin
+
 
 data class Usuario(
     @SerializedName("ID") val id: Int? = null,          // Autogenerado por Oracle

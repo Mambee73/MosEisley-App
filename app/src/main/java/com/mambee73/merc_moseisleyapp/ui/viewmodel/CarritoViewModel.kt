@@ -1,12 +1,12 @@
-package com.mambee73.merc_moseisleyapp.ui.viewmodel
+package com.mambee73.merc_moseisleyapp.ui.viewmodel //concentro la lógica de negocio
 
 import androidx.lifecycle.ViewModel
-import com.mambee73.merc_moseisleyapp.model.Producto
+import com.mambee73.merc_moseisleyapp.model.Producto //conecta a su repositorio y expone estados listos para la UI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 // ViewModel para manejar el carrito de compras
-class CarritoViewModel : ViewModel() {
+class CarritoViewModel : ViewModel() { //controla el carrito
 
     // Lista de productos en el carrito como StateFlow
     private val _carrito = MutableStateFlow<List<Producto>>(emptyList())
